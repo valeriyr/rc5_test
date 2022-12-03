@@ -1,5 +1,4 @@
-[![Rust](https://github.com/valeriyr/rc5_test/actions/workflows/rust.yml/badge.svg?branch=master&event=push)]
-(https://github.com/valeriyr/rc5_test/actions/workflows/rust.yml)
+[![Rust](https://github.com/valeriyr/rc5_test/actions/workflows/rust.yml/badge.svg?branch=master&event=push)](https://github.com/valeriyr/rc5_test/actions/workflows/rust.yml)
 
 Mintlayer recruitment test
 
