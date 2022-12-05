@@ -4,6 +4,7 @@ use crate::{
 };
 
 /// A generic implementation of the rc5 cipher that can be configured with different Word types.
+#[derive(Debug)]
 pub struct Endec<W: Word> {
     s: Vec<W>,
     rounds: usize,

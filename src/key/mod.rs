@@ -40,7 +40,7 @@ mod tests {
         let key = vec![];
 
         assert_eq!(
-            Key::try_from(key.as_ref()).err().unwrap(),
+            Key::try_from(key.as_ref()).unwrap_err(),
             KeyError::InvalidLength(0)
         );
     }
@@ -64,7 +64,7 @@ mod tests {
         let key = vec![0; 257];
 
         assert_eq!(
-            Key::try_from(key.as_ref()).err().unwrap(),
+            Key::try_from(key.as_ref()).unwrap_err(),
             KeyError::InvalidLength(257)
         );
     }

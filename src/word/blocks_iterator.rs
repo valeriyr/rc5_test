@@ -3,6 +3,7 @@ use std::marker::PhantomData;
 use super::{Word, WordError};
 
 /// The iterator can be used to iterate over an array of bytes, block by block, consisting of two words.
+#[derive(Debug)]
 pub struct BlocksIterator<'a, W: Word> {
     bytes: &'a [u8],
     index: usize,
@@ -81,9 +82,7 @@ mod tests {
         let bytes = vec![0x00, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66];
 
         assert_eq!(
-            BlocksIterator::<crate::word::W32>::try_from(bytes.as_ref())
-                .err()
-                .unwrap(),
+            BlocksIterator::<crate::word::W32>::try_from(bytes.as_ref()).unwrap_err(),
             WordError::InputCanNotBeSplittedByBlocks(7, 8)
         );
     }
