@@ -2,12 +2,16 @@ use std::marker::PhantomData;
 
 use super::{Word, WordError};
 
-pub struct BlocksIterator<'a, W: Word> {
+///
+/// The iterator can be used to iterate over an array of bytes, block by block, consisting of two words.
+///
+pub(crate) struct BlocksIterator<'a, W: Word> {
     bytes: &'a [u8],
     index: usize,
     _w: PhantomData<W>,
 }
 
+// TODO: must to be implemented based on the WordIterator
 impl<W> Iterator for BlocksIterator<'_, W>
 where
     W: Word,

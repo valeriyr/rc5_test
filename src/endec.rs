@@ -1,6 +1,9 @@
-use crate::{word::WordsIterator, BlocksIterator, Key, Rc5, Rc5Error, Word};
+use crate::{word::words_iterator::WordsIterator, BlocksIterator, Key, Rc5, Rc5Error, Word};
 
-pub struct Endec<W: Word> {
+///
+/// A generic implementation of the rc5 cipher that can be configured with different Word types.
+///
+pub(crate) struct Endec<W: Word> {
     s: Vec<W>,
     rounds: usize,
 }
@@ -9,6 +12,7 @@ impl<W> Rc5 for Endec<W>
 where
     W: Word,
 {
+    /// Returns a cipher text for the given plain text.
     fn encode(&self, plaintext: &[u8]) -> crate::Result<Vec<u8>> {
         let mut result = Vec::with_capacity(plaintext.len());
 
@@ -42,6 +46,7 @@ where
         Ok(result)
     }
 
+    /// Returns a plain text for the given cipher text.
     fn decode(&self, ciphertext: &[u8]) -> crate::Result<Vec<u8>> {
         let mut result = Vec::with_capacity(ciphertext.len());
 
@@ -81,6 +86,7 @@ impl<W> Endec<W>
 where
     W: Word,
 {
+    /// Creates a new Endec instance.
     pub(crate) fn setup(key: Key, rounds: usize) -> crate::Result<Self> {
         Ok(Self {
             s: Self::expand_key(key, rounds)?,
@@ -88,6 +94,7 @@ where
         })
     }
 
+    /// Returns an expanded key table needed for further encryption/decryption.
     fn expand_key(key: Key, rounds: usize) -> crate::Result<Vec<W>> {
         let mut s: Vec<W> = vec![W::zero(); 2 * (rounds + 1)];
         let mut l: Vec<W> = WordsIterator::<W>::try_from(key.raw())?.collect();
@@ -99,7 +106,7 @@ where
 
         let (mut a, mut b, mut i, mut j) = (W::zero(), W::zero(), 0, 0);
 
-        for _ in 0..3 * s.len() {
+        for _ in 0..3 * std::cmp::max(s.len(), l.len()) {
             a = a.wrapping_add(&b).wrapping_add(&s[i]).rotate_left(3);
             s[i] = a;
 

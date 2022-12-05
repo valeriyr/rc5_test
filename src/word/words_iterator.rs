@@ -2,7 +2,10 @@ use std::marker::PhantomData;
 
 use super::{Word, WordError};
 
-pub struct WordsIterator<'a, W: Word> {
+///
+/// The iterator can be used to iterate over an array of bytes word by word.
+///
+pub(crate) struct WordsIterator<'a, W: Word> {
     bytes: &'a [u8],
     index: usize,
     _w: PhantomData<W>,

@@ -17,7 +17,7 @@ mod w8_4_12 {
 
         let res = make_rc5().encode(&pt).unwrap();
 
-        assert!(&ct[..] == &res[..]);
+        assert_eq!(&ct[..], &res[..]);
     }
 
     #[test]
@@ -27,7 +27,7 @@ mod w8_4_12 {
 
         let res = make_rc5().decode(&ct).unwrap();
 
-        assert!(&pt[..] == &res[..]);
+        assert_eq!(&pt[..], &res[..]);
     }
 }
 
@@ -46,7 +46,7 @@ mod w16_8_16 {
 
         let res = make_rc5().encode(&pt).unwrap();
 
-        assert!(&ct[..] == &res[..]);
+        assert_eq!(&ct[..], &res[..]);
     }
 
     #[test]
@@ -56,7 +56,7 @@ mod w16_8_16 {
 
         let res = make_rc5().decode(&ct).unwrap();
 
-        assert!(&pt[..] == &res[..]);
+        assert_eq!(&pt[..], &res[..]);
     }
 }
 
@@ -78,7 +78,7 @@ mod w32_16_12 {
 
         let res = make_rc5(key.as_ref()).encode(&pt).unwrap();
 
-        assert!(&ct[..] == &res[..]);
+        assert_eq!(&ct[..], &res[..]);
     }
 
     #[test]
@@ -92,7 +92,7 @@ mod w32_16_12 {
 
         let res = make_rc5(key.as_ref()).encode(&pt).unwrap();
 
-        assert!(&ct[..] == &res[..]);
+        assert_eq!(&ct[..], &res[..]);
     }
 
     #[test]
@@ -106,7 +106,7 @@ mod w32_16_12 {
 
         let res = make_rc5(key.as_ref()).decode(&ct).unwrap();
 
-        assert!(&pt[..] == &res[..]);
+        assert_eq!(&pt[..], &res[..]);
     }
 
     #[test]
@@ -120,7 +120,7 @@ mod w32_16_12 {
 
         let res = make_rc5(key.as_ref()).decode(&ct).unwrap();
 
-        assert!(&pt[..] == &res[..]);
+        assert_eq!(&pt[..], &res[..]);
     }
 }
 
@@ -148,7 +148,7 @@ mod w64_24_24 {
 
         let res = make_rc5().encode(&pt).unwrap();
 
-        assert!(&ct[..] == &res[..]);
+        assert_eq!(&ct[..], &res[..]);
     }
 
     #[test]
@@ -164,7 +164,7 @@ mod w64_24_24 {
 
         let res = make_rc5().decode(&ct).unwrap();
 
-        assert!(&pt[..] == &res[..]);
+        assert_eq!(&pt[..], &res[..]);
     }
 }
 
@@ -203,10 +203,10 @@ mod general {
 
         let res = rc5.encode(&pt).unwrap();
 
-        assert!(&ct[..] == &res[..]);
+        assert_eq!(&ct[..], &res[..]);
 
         let res = rc5.decode(&ct).unwrap();
 
-        assert!(&pt[..] == &res[..]);
+        assert_eq!(&pt[..], &res[..]);
     }
 }

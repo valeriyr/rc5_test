@@ -4,10 +4,11 @@ pub mod words_iterator;
 
 use num_traits::{PrimInt, WrappingAdd, WrappingShl, WrappingShr, WrappingSub};
 
-pub use self::blocks_iterator::BlocksIterator;
 pub use self::error::WordError;
-pub use self::words_iterator::WordsIterator;
 
+///
+/// The trait can be implemented for words of different lengths.
+///
 pub trait Word:
     WrappingShr + WrappingShl + WrappingAdd + WrappingSub + PrimInt + From<u8> + std::fmt::Debug
 {
@@ -23,6 +24,9 @@ pub trait Word:
     fn from_le_bytes(bytes: Self::Bytes) -> Self;
 }
 
+///
+/// Generates a 'Word' implementation with the specified parameters.
+///
 macro_rules! decl_word {
     ($name:ident, $type:ty, $p:literal, $q:literal) => {
         pub type $name = $type;

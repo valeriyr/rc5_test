@@ -2,13 +2,18 @@ pub mod error;
 
 pub use self::error::KeyError;
 
+///
+/// Implementation of the rc5 key.
+/// Validates possible key length ranges from 1 to 256.
+///
 #[derive(Debug)]
 pub struct Key {
     value: Vec<u8>,
 }
 
 impl Key {
-    pub fn raw(&self) -> &[u8] {
+    /// Raw data accessor.
+    pub(crate) fn raw(&self) -> &[u8] {
         &self.value
     }
 }
