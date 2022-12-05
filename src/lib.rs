@@ -11,9 +11,6 @@ mod error;
 mod key;
 mod word;
 
-#[cfg(test)]
-mod tests;
-
 use endec::Endec;
 
 pub use self::error::Rc5Error;

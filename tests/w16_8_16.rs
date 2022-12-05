@@ -1,4 +1,4 @@
-use crate::{rc5_w16, Key, Rc5};
+use rc5_test::{rc5_w16, Key, Rc5};
 
 fn make_rc5() -> impl Rc5 {
     let key = vec![0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07];

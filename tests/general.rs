@@ -1,4 +1,4 @@
-use crate::{rc5_w32, Key, Rc5, Rc5Error, WordError};
+use rc5_test::{rc5_w32, Key, Rc5, Rc5Error, WordError};
 
 fn make_rc5(key: &[u8]) -> impl Rc5 {
     rc5_w32(Key::try_from(key.as_ref()).unwrap(), 12).unwrap()
