@@ -1,11 +1,8 @@
-pub mod error;
+mod error;
 
 pub use self::error::KeyError;
 
-///
-/// Implementation of the rc5 key.
-/// Validates possible key length ranges from 1 to 256.
-///
+/// Implementation of the rc5 key. Validates possible key length ranges from 1 to 256.
 #[derive(Debug)]
 pub struct Key {
     value: Vec<u8>,
@@ -42,20 +39,34 @@ mod tests {
     fn zero_size_key() {
         let key = vec![];
 
-        assert!(matches!(
-            Key::try_from(key.as_ref()),
-            Err(KeyError::InvalidLength(_))
-        ));
+        assert_eq!(
+            Key::try_from(key.as_ref()).err().unwrap(),
+            KeyError::InvalidLength(0)
+        );
+    }
+
+    #[test]
+    fn one_byte_key() {
+        let key = vec![0x00];
+
+        assert!(Key::try_from(key.as_ref()).is_ok());
+    }
+
+    #[test]
+    fn largest_key() {
+        let key = vec![0; 256];
+
+        assert!(Key::try_from(key.as_ref()).is_ok());
     }
 
     #[test]
     fn too_long_key() {
         let key = vec![0; 257];
 
-        assert!(matches!(
-            Key::try_from(key.as_ref()),
-            Err(KeyError::InvalidLength(_))
-        ));
+        assert_eq!(
+            Key::try_from(key.as_ref()).err().unwrap(),
+            KeyError::InvalidLength(257)
+        );
     }
 
     #[test]

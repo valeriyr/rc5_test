@@ -2,10 +2,8 @@ use std::marker::PhantomData;
 
 use super::{Word, WordError};
 
-///
 /// The iterator can be used to iterate over an array of bytes word by word.
-///
-pub(crate) struct WordsIterator<'a, W: Word> {
+pub struct WordsIterator<'a, W: Word> {
     bytes: &'a [u8],
     index: usize,
     _w: PhantomData<W>,
@@ -72,10 +70,12 @@ mod tests {
     fn invalid_bytes_input() {
         let bytes = vec![0x00, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66];
 
-        assert!(matches!(
-            WordsIterator::<crate::word::W32>::try_from(bytes.as_ref()),
-            Err(WordError::InputCanNotBeSplittedByWords(7, 4))
-        ));
+        assert_eq!(
+            WordsIterator::<crate::word::W32>::try_from(bytes.as_ref())
+                .err()
+                .unwrap(),
+            WordError::InputCanNotBeSplittedByWords(7, 4)
+        );
     }
 
     #[test]

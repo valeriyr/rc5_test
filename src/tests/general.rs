@@ -1,0 +1,42 @@
+use crate::{rc5_w32, Key, Rc5, Rc5Error, WordError};
+
+fn make_rc5(key: &[u8]) -> impl Rc5 {
+    rc5_w32(Key::try_from(key.as_ref()).unwrap(), 12).unwrap()
+}
+
+#[test]
+fn invalid_bytes_input() {
+    let key = vec![
+        0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E,
+        0x0F,
+    ];
+    let pt = vec![0x00, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66];
+
+    assert_eq!(
+        make_rc5(key.as_ref()).encode(&pt),
+        Err(Rc5Error::WordError(
+            WordError::InputCanNotBeSplittedByBlocks(7, 8)
+        ))
+    );
+}
+
+#[test]
+fn multiple_usage() {
+    let key = vec![
+        0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E,
+        0x0F,
+    ];
+
+    let pt = vec![0x00, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77];
+    let ct = vec![0x2D, 0xDC, 0x14, 0x9B, 0xCF, 0x08, 0x8B, 0x9E];
+
+    let rc5 = make_rc5(key.as_ref());
+
+    let res = rc5.encode(&pt).unwrap();
+
+    assert_eq!(&ct[..], &res[..]);
+
+    let res = rc5.decode(&ct).unwrap();
+
+    assert_eq!(&pt[..], &res[..]);
+}

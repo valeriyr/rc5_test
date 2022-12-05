@@ -7,38 +7,33 @@
 #![deny(unsafe_code)]
 
 mod endec;
+mod error;
+mod key;
 mod word;
-
-pub mod error;
-pub mod key;
 
 #[cfg(test)]
 mod tests;
 
 use endec::Endec;
-use word::{blocks_iterator::BlocksIterator, Word};
 
 pub use self::error::Rc5Error;
 pub use self::key::Key;
+pub use self::word::WordError;
 
 pub type Result<T> = std::result::Result<T, Rc5Error>;
 
 /// The rc5 cipher interface.
 pub trait Rc5 {
-    ///
     /// Returns a cipher text for the given plain text.
     /// Can be called multiple times for decoding text with the same key.
-    ///
     fn encode(&self, plaintext: &[u8]) -> crate::Result<Vec<u8>>;
 
-    ///
     /// Returns a plain text for the given cipher text.
     /// Can be called multiple times for decoding text with the same key.
-    ///
     fn decode(&self, ciphertext: &[u8]) -> crate::Result<Vec<u8>>;
 }
 
-/// Creates an rc5 endec instance for an 8-bit word.
+/// Creates an rc5 cipher instance for an 8-bit word.
 ///
 /// Examples
 ///
@@ -67,7 +62,7 @@ pub fn rc5_w8(key: Key, rounds: usize) -> crate::Result<impl Rc5> {
     Endec::<word::W8>::setup(key, rounds)
 }
 
-/// Creates an rc5 endec instance for a 16-bit word.
+/// Creates an rc5 cipher instance for a 16-bit word.
 ///
 /// Examples
 ///
@@ -92,7 +87,7 @@ pub fn rc5_w16(key: Key, rounds: usize) -> crate::Result<impl Rc5> {
     Endec::<word::W16>::setup(key, rounds)
 }
 
-/// Creates an rc5 endec instance for a 32-bit word.
+/// Creates an rc5 cipher instance for a 32-bit word.
 ///
 /// Examples
 ///
@@ -118,7 +113,7 @@ pub fn rc5_w32(key: Key, rounds: usize) -> crate::Result<impl Rc5> {
     Endec::<word::W32>::setup(key, rounds)
 }
 
-/// Creates an rc5 endec instance for a 64-bit word.
+/// Creates an rc5 cipher instance for a 64-bit word.
 ///
 /// Examples
 ///

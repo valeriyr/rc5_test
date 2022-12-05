@@ -1,9 +1,10 @@
-use crate::{word::words_iterator::WordsIterator, BlocksIterator, Key, Rc5, Rc5Error, Word};
+use crate::{
+    word::{BlocksIterator, Word, WordsIterator},
+    Key, Rc5, Rc5Error,
+};
 
-///
 /// A generic implementation of the rc5 cipher that can be configured with different Word types.
-///
-pub(crate) struct Endec<W: Word> {
+pub struct Endec<W: Word> {
     s: Vec<W>,
     rounds: usize,
 }
@@ -57,7 +58,7 @@ where
                 b = b.wrapping_sub(&self.s[2 * i + 1]).rotate_right(
                     (a % bits).to_u32().ok_or_else(|| {
                         Rc5Error::InternalError(String::from(
-                            "error during rounding word B when dencoding",
+                            "error during rounding word B when decoding",
                         ))
                     })?,
                 ) ^ a;
@@ -65,7 +66,7 @@ where
                     .wrapping_sub(&self.s[2 * i])
                     .rotate_right((b % bits).to_u32().ok_or_else(|| {
                         Rc5Error::InternalError(String::from(
-                            "error during rounding word A when dencoding",
+                            "error during rounding word A when decoding",
                         ))
                     })?)
                     ^ b;
@@ -87,7 +88,7 @@ where
     W: Word,
 {
     /// Creates a new Endec instance.
-    pub(crate) fn setup(key: Key, rounds: usize) -> crate::Result<Self> {
+    pub fn setup(key: Key, rounds: usize) -> crate::Result<Self> {
         Ok(Self {
             s: Self::expand_key(key, rounds)?,
             rounds,
@@ -111,9 +112,11 @@ where
             s[i] = a;
 
             let ab = a.wrapping_add(&b);
-            b = ab
-                .wrapping_add(&l[j])
-                .rotate_left((ab % W::BITS.into()).to_u32().unwrap());
+            b =
+                ab.wrapping_add(&l[j])
+                    .rotate_left((ab % W::BITS.into()).to_u32().ok_or_else(|| {
+                        Rc5Error::InternalError(String::from("error during key mixing"))
+                    })?);
             l[j] = b;
 
             i = (i + 1) % s.len();
